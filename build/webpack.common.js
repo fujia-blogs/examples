@@ -4,6 +4,7 @@ const path = require('path');
 // const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const semver = require('semver');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 // const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 // NOTE: why is v14.0.0? seeing: https://nodejs.org/dist/latest-v16.x/docs/api/fs.html#promises-api
@@ -27,6 +28,9 @@ module.exports = {
   output: {
     filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, '../dist'),
+  },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js'],
   },
   module: {
     rules: [
@@ -57,5 +61,16 @@ module.exports = {
       },
     ],
   },
-  plugins: [new CleanWebpackPlugin(), ...genMultiEntryAndPlugin().plugins],
+  plugins: [
+    new CleanWebpackPlugin(),
+    ...genMultiEntryAndPlugin().plugins,
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, '../assets'),
+          to: path.resolve(__dirname, '../dist/assets'),
+        },
+      ],
+    }),
+  ],
 };

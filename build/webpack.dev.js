@@ -10,7 +10,6 @@ module.exports = merge(common, {
   devtool: 'inline-source-map',
   devServer: {
     static: path.resolve(__dirname, '../dist'),
-    open: true,
     host: '0.0.0.0',
     port: 9527,
     hot: true,

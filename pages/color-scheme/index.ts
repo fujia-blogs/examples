@@ -14,3 +14,5 @@ btnEle?.addEventListener(
   },
   false
 );
+
+export {};
