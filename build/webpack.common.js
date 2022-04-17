@@ -27,7 +27,6 @@ module.exports = {
   output: {
     filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, '../dist'),
-    // chunkFilename: '[name]/[name].[contenthash:8].js',
   },
   module: {
     rules: [
