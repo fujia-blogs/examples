@@ -1,22 +1,40 @@
 'use strict';
 
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const semver = require('semver');
 // const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
-// const { HotModuleReplacementPlugin } = require('webpack');
+
+// NOTE: why is v14.0.0? seeing: https://nodejs.org/dist/latest-v16.x/docs/api/fs.html#promises-api
+const LOWEST_NODE_VERSION = '14.0.0';
+
+(function checkNodeVersion() {
+  const curNodeVersion = process.version;
+
+  if (semver.lt(curNodeVersion, LOWEST_NODE_VERSION)) {
+    console.error(
+      `Oops! we need the node.js version greater than or equal to v${LOWEST_NODE_VERSION}, however now that is v${curNodeVersion}, please upgrade node.js version!`
+    );
+    process.exit(0);
+  }
+})();
+
+const { genMultiEntryAndPlugin } = require('./utils');
 
 module.exports = {
-  entry: path.resolve(__dirname, '../src/index.ts'),
+  entry: genMultiEntryAndPlugin().entry,
   output: {
     filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, '../dist'),
+    // chunkFilename: '[name]/[name].[contenthash:8].js',
   },
   module: {
     rules: [
       {
-        test: /\.ts$/,
+        test: /\.tsx?$/,
         use: ['ts-loader'],
+        exclude: /node_modules/,
       },
       {
         test: /\.css$/,
@@ -40,13 +58,5 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: ['dist'],
-    }),
-    new HtmlWebpackPlugin({
-      title: 'Code Examples',
-      template: path.resolve(__dirname, '../public/index.html'),
-    }),
-  ],
+  plugins: [new CleanWebpackPlugin(), ...genMultiEntryAndPlugin().plugins],
 };
