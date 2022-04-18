@@ -1,0 +1,23 @@
+:root {
+  --primary: #488cff;
+  --secondary: #ffff8c;
+}
+
+#firstParagraph {
+  background-color: var(--primary);
+  color: var(--secondary);
+}
+
+#secondParagraph {
+  background-color: var(--secondary);
+  color: var(--primary);
+}
+
+#container {
+  --primary: #48ff32;
+}
+
+#thirdParagraph {
+  background-color: var(--primary);
+  color: var(--secondary);
+}
